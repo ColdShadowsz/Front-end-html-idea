@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Color Flow</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: linear-gradient(45deg, black, gray, white, black);
+            background-size: 400% 400%;
+            animation: gradientFlow 10s infinite ease-in-out;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            filter: blur(8px);
+            animation: float 10s linear forwards;
+        }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translate(0, 0) scale(1); }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.2); }
+        }
+
+        .login-container {
+            background: black;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            position: relative;
+            text-align: center;
+            overflow: hidden;
+            width: 300px;
+        }
+
+        .login-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, transparent, white, transparent);
+            animation: movingLine 3s infinite linear;
+        }
+
+        @keyframes movingLine {
+            0% { left: -100%; opacity: 0; }
+            50% { left: 100%; opacity: 0.5; }
+            100% { left: -100%; opacity: 0; }
+        }
+
+        h1 {
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 20px;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 3px solid white;
+            width: fit-content;
+            margin: auto;
+            animation: typing 6s steps(8) infinite alternate;
+        }
+
+        @keyframes typing {
+            0% { width: 0; }
+            40% { width: 8ch; }
+            70% { width: 9ch; }
+            100% { width: 0; }
+        }
+
+        input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: gray;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .credit {
+            margin-top: 10px;
+            font-size: 12px;
+            color: gray;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Welcome</h1>
+        <input type="text" placeholder="Username/Email">
+        <input type="password" placeholder="Password">
+        <button>Sign In</button>
+        <p class="credit">Made by: Cold_Shadowsz</p>
+    </div>
+
+    <script>
+        let maxCircles = 12; // Adjustable max circles
+        let spawnInterval = 1500; // Adjustable spawn rate (ms)
+
+        function createCircles() {
+            const colors = ['rgba(0, 0, 0, 0.2)', 'rgba(128, 128, 128, 0.2)', 'rgba(255, 255, 255, 0.2)'];
+            setInterval(() => {
+                if (document.querySelectorAll('.circle').length < maxCircles) {
+                    let circle = document.createElement('div');
+                    let size = Math.random() * 100 + 50;
+                    let dx = (Math.random() - 0.5) * 300;
+                    let dy = (Math.random() - 0.5) * 300;
+                    
+                    circle.classList.add('circle');
+                    circle.style.width = `${size}px`;
+                    circle.style.height = `${size}px`;
+                    circle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    circle.style.top = `${Math.random() * 90}vh`;
+                    circle.style.left = `${Math.random() * 90}vw`;
+                    circle.style.setProperty('--dx', `${dx}px`);
+                    circle.style.setProperty('--dy', `${dy}px`);
+                    circle.style.animationDuration = `10s`;
+                    document.body.appendChild(circle);
+                    setTimeout(() => circle.remove(), 10000);
+                }
+            }, spawnInterval);
+        }
+        createCircles();
+    </script>
+</body>
+</html>
